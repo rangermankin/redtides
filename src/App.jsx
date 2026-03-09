@@ -724,7 +724,7 @@ export default function App() {
                 </div>
                 {isIOS && (
                   <div style={{ display: "flex", alignItems: "center", gap: 10, background: "#ffffff10", borderRadius: 8, padding: "8px 16px", border: "1px solid #ffffff18" }}>
-                    <span style={{ fontSize: 22, lineHeight: 1 }}>□↑</span>
+                    <span style={{ fontSize: 26, lineHeight: 1 }}>📤</span>
                     <div style={{ fontSize: "clamp(10px,2.5vw,13px)", letterSpacing: "0.1em", color: "#c9922a", lineHeight: 1.5 }}>
                       Tap Share then<br/>"Add to Home Screen"
                     </div>
