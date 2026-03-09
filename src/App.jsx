@@ -714,9 +714,38 @@ export default function App() {
           <div style={{ fontFamily: "'Cinzel',Georgia,serif", fontSize: "clamp(9px,2.5vw,13px)", letterSpacing: "0.14em", color: "#ffffff40", textAlign: "center", maxWidth: 220, lineHeight: 1.7 }}>
             Red Tides requires landscape orientation
           </div>
-          <div style={{ fontFamily: "'Cinzel',Georgia,serif", fontSize: "clamp(11px,3vw,16px)", letterSpacing: "0.12em", color: "#ffffff70", textAlign: "center", maxWidth: 260, lineHeight: 1.8, marginTop: 8, borderTop: "1px solid #ffffff20", paddingTop: 16 }}>
-            For the best experience, add this page to your home screen
-          </div>
+          {(() => {
+            const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+            const isAndroid = /android/i.test(navigator.userAgent);
+            return (
+              <div style={{ fontFamily: "'Cinzel',Georgia,serif", textAlign: "center", maxWidth: 300, marginTop: 8, borderTop: "1px solid #ffffff20", paddingTop: 16, display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                <div style={{ fontSize: "clamp(11px,3vw,15px)", letterSpacing: "0.12em", color: "#ffffff70", lineHeight: 1.7 }}>
+                  For the best experience
+                </div>
+                {isIOS && (
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, background: "#ffffff10", borderRadius: 8, padding: "8px 16px", border: "1px solid #ffffff18" }}>
+                    <span style={{ fontSize: 22, lineHeight: 1 }}>□↑</span>
+                    <div style={{ fontSize: "clamp(10px,2.5vw,13px)", letterSpacing: "0.1em", color: "#c9922a", lineHeight: 1.5 }}>
+                      Tap Share then<br/>"Add to Home Screen"
+                    </div>
+                  </div>
+                )}
+                {isAndroid && (
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, background: "#ffffff10", borderRadius: 8, padding: "8px 16px", border: "1px solid #ffffff18" }}>
+                    <span style={{ fontSize: 22, lineHeight: 1, color: "#ffffff90" }}>⋮</span>
+                    <div style={{ fontSize: "clamp(10px,2.5vw,13px)", letterSpacing: "0.1em", color: "#c9922a", lineHeight: 1.5 }}>
+                      Tap the browser menu<br/>"Add to Home Screen"
+                    </div>
+                  </div>
+                )}
+                {!isIOS && !isAndroid && (
+                  <div style={{ fontSize: "clamp(10px,2.5vw,13px)", letterSpacing: "0.1em", color: "#c9922a", lineHeight: 1.7 }}>
+                    Add this page to your home screen
+                  </div>
+                )}
+              </div>
+            );
+          })()}
         </div>
       )}
 
