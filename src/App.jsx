@@ -49,6 +49,7 @@ const GLOBAL_CSS = `
     width: 100%;
     height: 100dvh;
     overflow: hidden;
+    background: #0d1117;
   }
 
   .rt-app {
@@ -632,8 +633,8 @@ export default function App() {
     if (touchStart.current === null) return;
     const diff = touchStart.current - e.changedTouches[0].clientX;
     if (Math.abs(diff) > 60) {
-      if (screen === 0) setScreen(1);
-      else if (screen === 1) setScreen(0);
+      if (diff > 0) setScreen(s => Math.min(s + 1, 2)); // swipe left → next
+      else          setScreen(s => Math.max(s - 1, 0)); // swipe right → prev
     }
     touchStart.current = null;
   };
