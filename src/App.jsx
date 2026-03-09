@@ -14,6 +14,7 @@ function useIsPortrait() {
 }
 
 
+function useScreenSize() {
   const [size, setSize] = useState({ w: window.innerWidth, h: window.innerHeight });
   useEffect(() => {
     const update = () => setSize({ w: window.innerWidth, h: window.innerHeight });
@@ -184,6 +185,8 @@ const GLOBAL_CSS = `
   .rt-vanquished {
     animation: vanquished-pulse 1.4s ease-in-out infinite;
   }
+
+  @media (orientation: landscape) and (max-height: 500px) {
     .rt-header { padding: 3px 12px !important; }
     .rt-grid   { margin: 2px 8px !important; }
     .rt-footer { display: none; }
@@ -206,7 +209,7 @@ const GLOBAL_CSS = `
 `;
 
 function Label({ children, color = "#ffffff35", size }) {
-  return <div className="rt-label" style={{ color, ...(size ? { fontSize: size } : {}) }}>{children}</div>;
+  return <div className="rt-label" style={{ color, whiteSpace: "nowrap", ...(size ? { fontSize: size } : {}) }}>{children}</div>;
 }
 
 function useTapSplit({ value, min, max, onChange }) {
@@ -339,8 +342,8 @@ function PairCell({ aLabel, aVal, bLabel, bVal, accent, fs = {} }) {
   return (
     <div style={{ width: "100%", height: "100%", display: "flex" }}>
       {[[aLabel, aVal],[bLabel, bVal]].map(([lbl, val], i) => (
-        <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", borderRight: i === 0 ? "1px solid #ffffff08" : "none" }}>
-          <Label color={`${accent}70`} size={fs.label}>{lbl}</Label>
+        <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", borderRight: i === 0 ? "1px solid #ffffff08" : "none", overflow: "hidden" }}>
+          <div style={{ fontSize: "clamp(6px, 1.6vw, 10px)", letterSpacing: "0.14em", textTransform: "uppercase", fontFamily: "'Cinzel',Georgia,serif", color: `${accent}70`, whiteSpace: "nowrap", marginBottom: 2 }}>{lbl}</div>
           <div style={{ fontSize: fs.bigval ?? "clamp(13px,3.8dvh,28px)", fontWeight: 700, fontFamily: "'Cinzel',Georgia,serif", lineHeight: 1, color: val === 0 ? "#ffffff28" : accent }}>{val}</div>
         </div>
       ))}
@@ -488,14 +491,32 @@ const FACTIONS = [
 
 function FactionScreen({ onSelect, isDirty, activeFactionId }) {
   const [pendingFaction, setPendingFaction] = useState(null);
+  const touchStartX = useRef(null);
+  const touchStartY = useRef(null);
 
   const handleTap = (faction) => {
     if (isDirty && faction.id !== activeFactionId) {
       setPendingFaction(faction);
-    } else {
+    } else if (faction.id !== activeFactionId) {
       onSelect(faction);
     }
   };
+
+  const makeCardTouch = (faction) => ({
+    onTouchStart: (e) => {
+      touchStartX.current = e.touches[0].clientX;
+      touchStartY.current = e.touches[0].clientY;
+    },
+    onTouchEnd: (e) => {
+      if (touchStartX.current === null) return;
+      const dx = Math.abs(e.changedTouches[0].clientX - touchStartX.current);
+      const dy = Math.abs(e.changedTouches[0].clientY - touchStartY.current);
+      touchStartX.current = null;
+      touchStartY.current = null;
+      if (dx > 10 || dy > 10) return; // was a swipe, not a tap
+      handleTap(faction);
+    },
+  });
 
   return (
     <div className="rt-screen" style={{ fontFamily: "'Cinzel',Georgia,serif", position: "relative" }}>
@@ -512,7 +533,7 @@ function FactionScreen({ onSelect, isDirty, activeFactionId }) {
             <div
               key={faction.id}
               onClick={() => handleTap(faction)}
-              onTouchEnd={(e) => { e.preventDefault(); handleTap(faction); }}
+              {...makeCardTouch(faction)}
               style={{
                 flex: 1,
                 maxWidth: 320,
