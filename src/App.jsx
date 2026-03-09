@@ -707,12 +707,15 @@ export default function App() {
           background: "#0d1117",
           display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 24,
         }}>
-          <div style={{ fontSize: 48, lineHeight: 1, animation: "rt-rotate-hint 2s ease-in-out infinite" }}>⟳</div>
+          <div style={{ fontSize: 48, lineHeight: 1, animation: "rt-rotate-hint 2s ease-in-out infinite", color: "#c9922a" }}>⟳</div>
           <div style={{ fontFamily: "'Cinzel',Georgia,serif", fontSize: "clamp(14px,4vw,20px)", letterSpacing: "0.28em", textTransform: "uppercase", color: "#c9922a", fontWeight: 700 }}>
             Rotate Device
           </div>
           <div style={{ fontFamily: "'Cinzel',Georgia,serif", fontSize: "clamp(9px,2.5vw,13px)", letterSpacing: "0.14em", color: "#ffffff40", textAlign: "center", maxWidth: 220, lineHeight: 1.7 }}>
             Red Tides requires landscape orientation
+          </div>
+          <div style={{ fontFamily: "'Cinzel',Georgia,serif", fontSize: "clamp(11px,3vw,16px)", letterSpacing: "0.12em", color: "#ffffff70", textAlign: "center", maxWidth: 260, lineHeight: 1.8, marginTop: 8, borderTop: "1px solid #ffffff20", paddingTop: 16 }}>
+            For the best experience, add this page to your home screen
           </div>
         </div>
       )}
