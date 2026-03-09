@@ -2,7 +2,18 @@ import { useState, useRef, useEffect } from "react";
 
 const COL_ACCENT = ["#c9922a", "#4a9eca", "#e05c3a", "#7ec87e"];
 
-function useScreenSize() {
+function useIsPortrait() {
+  const [portrait, setPortrait] = useState(() => window.innerHeight > window.innerWidth);
+  useEffect(() => {
+    const check = () => setPortrait(window.innerHeight > window.innerWidth);
+    window.addEventListener("resize", check);
+    window.addEventListener("orientationchange", check);
+    return () => { window.removeEventListener("resize", check); window.removeEventListener("orientationchange", check); };
+  }, []);
+  return portrait;
+}
+
+
   const [size, setSize] = useState({ w: window.innerWidth, h: window.innerHeight });
   useEffect(() => {
     const update = () => setSize({ w: window.innerWidth, h: window.innerHeight });
@@ -157,6 +168,13 @@ const GLOBAL_CSS = `
     .rt-header    { padding: 14px 20px 12px !important; }
     .rt-grid      { margin: 8px 14px 10px !important; border-radius: 10px !important; }
     .rt-toggle button { padding: 5px 18px; font-size: 11px; }
+  }
+
+  @keyframes rt-rotate-hint {
+    0%   { transform: rotate(0deg);   opacity: 0.5; }
+    40%  { transform: rotate(-90deg); opacity: 1;   }
+    60%  { transform: rotate(-90deg); opacity: 1;   }
+    100% { transform: rotate(0deg);   opacity: 0.5; }
   }
 
   @keyframes vanquished-pulse {
@@ -606,6 +624,7 @@ function FactionScreen({ onSelect, isDirty, activeFactionId }) {
 // ── App shell ──────────────────────────────────────────────────
 
 export default function App() {
+  const isPortrait = useIsPortrait();
   const [config, setConfig]           = useState(initialConfig);
   const [hp, setHp]                   = useState(initialConfig.maxHp ?? 0);
   const [maneuver, setManeuver]       = useState(0);
@@ -660,6 +679,22 @@ export default function App() {
       }}
     >
       <style>{GLOBAL_CSS}</style>
+
+      {isPortrait && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 999,
+          background: "#0d1117",
+          display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 24,
+        }}>
+          <div style={{ fontSize: 48, lineHeight: 1, animation: "rt-rotate-hint 2s ease-in-out infinite" }}>⟳</div>
+          <div style={{ fontFamily: "'Cinzel',Georgia,serif", fontSize: "clamp(14px,4vw,20px)", letterSpacing: "0.28em", textTransform: "uppercase", color: "#c9922a", fontWeight: 700 }}>
+            Rotate Device
+          </div>
+          <div style={{ fontFamily: "'Cinzel',Georgia,serif", fontSize: "clamp(9px,2.5vw,13px)", letterSpacing: "0.14em", color: "#ffffff40", textAlign: "center", maxWidth: 220, lineHeight: 1.7 }}>
+            Red Tides requires landscape orientation
+          </div>
+        </div>
+      )}
 
       <div className="rt-toggle">
         {[["Status", 0], ["Configure", 1], ["Faction", 2]].map(([label, i]) => (
