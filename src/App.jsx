@@ -402,9 +402,10 @@ function DisplayCell({ label, value, accent = "#f0e6c8", warn, warnLabel, fs = {
   );
 }
 
-function MainScreen({ config, hp, maneuver, round, onHpChange, onManChange, onRoundChange }) {
+function MainScreen({ config, hp, maneuver, round, onHpChange, onManChange, onRoundChange, factionName, factionColor }) {
   const fs = useFontSizes();
   const maxHp = config.maxHp ?? 0;
+  const fc = factionColor ?? "#c9922a";
 
   const s = {
     grapeArmor:  config.grapeArmor  ?? 0, grapeMod:    config.grapeMod    ?? 0,
@@ -418,8 +419,8 @@ function MainScreen({ config, hp, maneuver, round, onHpChange, onManChange, onRo
   return (
     <div className="rt-screen" style={{ fontFamily: "'Cinzel',Georgia,serif" }}>
       <div className="rt-header">
-        <div style={{ fontSize: 12, letterSpacing: "0.28em", textTransform: "uppercase", color: "#c9922a", fontWeight: 700 }}>Red Tides</div>
-        <div style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "#ffffff30" }}>Ship Status</div>
+        <div style={{ fontSize: 12, letterSpacing: "0.28em", textTransform: "uppercase", color: fc, fontWeight: 700 }}>Red Tides</div>
+        <div style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "#ffffff50" }}>{factionName ?? "Ship Status"}</div>
         <div style={{ fontSize: 8, letterSpacing: "0.15em", textTransform: "uppercase", color: "#ffffff20" }}>Configure ⟶</div>
       </div>
 
@@ -699,13 +700,19 @@ export default function App() {
     setScreen(0);
   };
 
+  const activeFaction = activeFactionId
+    ? FACTION_GROUPS.flatMap(g => g.variants).find(v => v.id === activeFactionId)
+    : null;
+  const factionColor = activeFaction?.color ?? "#c9922a";
+  const factionName  = activeFaction?.name  ?? null;
+
   return (
     <div className="rt-app"
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
       style={{
         background: "#0d1117",
-        backgroundImage: `radial-gradient(ellipse at 15% 50%, #0d2235 0%, transparent 55%), radial-gradient(ellipse at 85% 50%, #1a0d08 0%, transparent 55%)`,
+        backgroundImage: `radial-gradient(ellipse at 15% 50%, ${factionColor}20 0%, transparent 55%), radial-gradient(ellipse at 85% 50%, ${factionColor}12 0%, transparent 55%)`,
       }}
     >
       <style>{GLOBAL_CSS}</style>
@@ -768,7 +775,7 @@ export default function App() {
         ))}
       </div>
 
-      {screen === 0 && <MainScreen config={config} hp={hp} maneuver={maneuver} round={round} onHpChange={handleHpChange} onManChange={handleManChange} onRoundChange={handleRoundChange} />}
+      {screen === 0 && <MainScreen config={config} hp={hp} maneuver={maneuver} round={round} onHpChange={handleHpChange} onManChange={handleManChange} onRoundChange={handleRoundChange} factionName={factionName} factionColor={factionColor} />}
       {screen === 1 && <ConfigScreen config={config} setConfig={handleConfigChange} />}
       {screen === 2 && <FactionScreen onSelect={handleFactionSelect} isDirty={isDirty} activeFactionId={activeFactionId} />}
     </div>
