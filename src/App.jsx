@@ -402,9 +402,10 @@ function DisplayCell({ label, value, accent = "#f0e6c8", warn, warnLabel, fs = {
   );
 }
 
-function MainScreen({ config, hp, maneuver, round, onHpChange, onManChange, onRoundChange }) {
+function MainScreen({ config, hp, maneuver, round, onHpChange, onManChange, onRoundChange, factionName, factionColor }) {
   const fs = useFontSizes();
   const maxHp = config.maxHp ?? 0;
+  const fc = factionColor ?? "#c9922a";
 
   const s = {
     grapeArmor:  config.grapeArmor  ?? 0, grapeMod:    config.grapeMod    ?? 0,
@@ -418,39 +419,39 @@ function MainScreen({ config, hp, maneuver, round, onHpChange, onManChange, onRo
   return (
     <div className="rt-screen" style={{ fontFamily: "'Cinzel',Georgia,serif" }}>
       <div className="rt-header">
-        <div style={{ fontSize: 12, letterSpacing: "0.28em", textTransform: "uppercase", color: "#c9922a", fontWeight: 700 }}>Red Tides</div>
-        <div style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "#ffffff30" }}>Ship Status</div>
+        <div style={{ fontSize: 12, letterSpacing: "0.28em", textTransform: "uppercase", color: fc, fontWeight: 700 }}>Red Tides</div>
+        <div style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: factionName ? `${fc}dd` : "#ffffff50" }}>{factionName ?? "Ship Status"}</div>
         <div style={{ fontSize: 8, letterSpacing: "0.15em", textTransform: "uppercase", color: "#ffffff20" }}>Configure ⟶</div>
       </div>
 
       <div className="rt-grid" style={{ display: "grid", gridTemplateColumns: "25% 50% 25%", gridTemplateRows: "repeat(3,1fr)" }}>
-        <div style={{ border: "1px solid #ffffff0d", display: "flex" }}>
+        <div style={{ border: `1px solid ${fc}40`, display: "flex" }}>
           <PairCell aLabel="Grp Arm" aVal={s.grapeArmor} bLabel="Grp Mod" bVal={s.grapeMod} accent={COL_ACCENT[2]} fs={fs} />
         </div>
-        <div style={{ border: "1px solid #ffffff0d" }}>
+        <div style={{ border: `1px solid ${fc}40` }}>
           <AdjustCell value={hp} min={0} max={maxHp} onChange={onHpChange} label="Hull Points" sub="max" subVal={maxHp} accent="#f0e6c8" hpMode={true} fs={fs} />
         </div>
-        <div style={{ border: "1px solid #ffffff0d" }}>
+        <div style={{ border: `1px solid ${fc}40` }}>
           <RoundCell round={round} onChange={onRoundChange} fs={fs} />
         </div>
 
-        <div style={{ border: "1px solid #ffffff0d", display: "flex" }}>
+        <div style={{ border: `1px solid ${fc}40`, display: "flex" }}>
           <PairCell aLabel="Rnd Arm" aVal={s.roundArmor} bLabel="Rnd Mod" bVal={s.roundMod} accent={COL_ACCENT[1]} fs={fs} />
         </div>
-        <div style={{ border: "1px solid #ffffff0d" }}>
+        <div style={{ border: `1px solid ${fc}40` }}>
           <AdjustCell value={maneuver} min={0} max={99} onChange={onManChange} label="Maneuver" accent="#4a9eca" fs={fs} />
         </div>
-        <div style={{ border: "1px solid #ffffff0d" }}>
+        <div style={{ border: `1px solid ${fc}40` }}>
           <DisplayCell label="Fortune" value={s.fortuneDice} accent={COL_ACCENT[0]} fs={fs} />
         </div>
 
-        <div style={{ border: "1px solid #ffffff0d", display: "flex" }}>
+        <div style={{ border: `1px solid ${fc}40`, display: "flex" }}>
           <PairCell aLabel="Chn Arm" aVal={s.chainArmor} bLabel="Chn Mod" bVal={s.chainMod} accent={COL_ACCENT[3]} fs={fs} />
         </div>
-        <div style={{ border: "1px solid #ffffff0d" }}>
+        <div style={{ border: `1px solid ${fc}40` }}>
           <CannonCell close={s.closePower} med={s.medPower} long={s.longPower} fs={fs} />
         </div>
-        <div style={{ border: "1px solid #ffffff0d" }}>
+        <div style={{ border: `1px solid ${fc}40` }}>
           <DisplayCell label="Infamy" value={s.infamy} warn={s.infamy >= 10} warnLabel="Jealousy!" fs={fs} />
         </div>
       </div>
@@ -462,37 +463,49 @@ function MainScreen({ config, hp, maneuver, round, onHpChange, onManChange, onRo
 
 // ── Faction presets ────────────────────────────────────────────
 
-const FACTIONS = [
+const P = { maxHp: 20, fortuneDice: 2, infamy: 0, longPower: 4, medPower: 4, closePower: 4, grapeArmor: 0, roundArmor: 0, chainArmor: 0, grapeMod: 0, roundMod: 0, chainMod: 0 };
+const A = { maxHp: 15, fortuneDice: 2, infamy: 0, longPower: 4, medPower: 4, closePower: 4, grapeArmor: 0, roundArmor: 1, chainArmor: 1, grapeMod: 0, roundMod: 0, chainMod: 0 };
+
+const FACTION_GROUPS = [
   {
-    id: "pirate",
-    name: "Pirate",
-    color: "#c9922a",
-    description: "Classic Caribbean corsair",
-    stats: {
-      maxHp: 20, fortuneDice: 2, infamy: 0,
-      longPower: 4, medPower: 4, closePower: 4,
-      grapeArmor: 0, roundArmor: 0, chainArmor: 0,
-      grapeMod: 0, roundMod: 0, chainMod: 0,
-    },
-    initialManeuver: 6,
+    id: "blue", name: "Blue Realm", color: "#7ec87e",
+    variants: [
+      { id: "blue-main",  name: "Blue Realm",     color: "#7ec87e", description: "Lords of wind and tide",    stats: { ...P }, initialManeuver: 6 },
+      { id: "blue-dirge", name: "Dirge of Piety", color: "#7ec87e", description: "Mourners of the deep",      stats: { ...P }, initialManeuver: 6 },
+    ],
   },
   {
-    id: "azteca",
-    name: "Azteca",
-    color: "#e05c3a",
-    description: "Warriors of the Flower War",
-    stats: {
-      maxHp: 15, fortuneDice: 2, infamy: 0,
-      longPower: 4, medPower: 4, closePower: 4,
-      grapeArmor: 0, roundArmor: 1, chainArmor: 1,
-      grapeMod: 0, roundMod: 0, chainMod: 0,
-    },
-    initialManeuver: 5,
+    id: "cabal", name: "Caribbea Cabal", color: "#d4b832",
+    variants: [
+      { id: "cabal-main",  name: "Caribbea Cabal", color: "#d4b832", description: "Masters of cannon and gold", stats: { ...P }, initialManeuver: 6 },
+      { id: "cabal-brann", name: "Brann Cult",      color: "#d4b832", description: "Forge and flame",            stats: { ...P }, initialManeuver: 6 },
+    ],
+  },
+  {
+    id: "deep", name: "Creatures of the Deep", color: "#9b59b6",
+    variants: [
+      { id: "deep-main",    name: "Creatures of the Deep", color: "#9b59b6", description: "Masters of the ocean depths",    stats: { ...P }, initialManeuver: 6 },
+      { id: "deep-mariana", name: "Mariana Swarm",          color: "#9b59b6", description: "The depths rise to swallow all", stats: { ...P }, initialManeuver: 6 },
+    ],
+  },
+  {
+    id: "fire", name: "Firebelly", color: "#e05c3a",
+    variants: [
+      { id: "fire-main",  name: "Firebelly",        color: "#e05c3a", description: "Fire and iron",             stats: { ...P }, initialManeuver: 6 },
+      { id: "fire-order", name: "Order of Eustice", color: "#e05c3a", description: "Sacred geometries of war",  stats: { ...P }, initialManeuver: 6 },
+    ],
+  },
+  {
+    id: "azteca", name: "Azteca Republic", color: "#e8a020",
+    variants: [
+      { id: "azteca-main", name: "Azteca Republic", color: "#e8a020", description: "Divine vessels of the sun", stats: { ...A }, initialManeuver: 5 },
+    ],
   },
 ];
 
 function FactionScreen({ onSelect, isDirty, activeFactionId }) {
   const [pendingFaction, setPendingFaction] = useState(null);
+  const [subGroup, setSubGroup] = useState(null);
   const touchStartX = useRef(null);
   const touchStartY = useRef(null);
 
@@ -504,7 +517,7 @@ function FactionScreen({ onSelect, isDirty, activeFactionId }) {
     }
   };
 
-  const makeCardTouch = (faction) => ({
+  const makeCardTouch = (onTap) => ({
     onTouchStart: (e) => {
       touchStartX.current = e.touches[0].clientX;
       touchStartY.current = e.touches[0].clientY;
@@ -515,125 +528,120 @@ function FactionScreen({ onSelect, isDirty, activeFactionId }) {
       const dy = Math.abs(e.changedTouches[0].clientY - touchStartY.current);
       touchStartX.current = null;
       touchStartY.current = null;
-      if (dx > 10 || dy > 10) return; // was a swipe, not a tap
-      handleTap(faction);
+      if (dx > 10 || dy > 10) return;
+      onTap();
     },
   });
+
+  const renderGroupCard = (group) => {
+    const isActive = group.variants.some(v => v.id === activeFactionId);
+    const hasVariants = group.variants.length > 1;
+    return (
+      <div
+        key={group.id}
+        onClick={() => hasVariants ? setSubGroup(group) : handleTap(group.variants[0])}
+        {...makeCardTouch(() => hasVariants ? setSubGroup(group) : handleTap(group.variants[0]))}
+        style={{
+          flex: 1, maxWidth: 200, height: "100%", maxHeight: 240,
+          display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+          gap: 10, border: `1px solid ${isActive ? group.color : group.color + "40"}`,
+          borderRadius: 10, background: isActive ? `${group.color}18` : `${group.color}08`,
+          cursor: "pointer", userSelect: "none", transition: "background 0.2s, border-color 0.2s",
+          padding: "14px 12px", position: "relative",
+        }}
+      >
+        {isActive && (
+          <div style={{ position: "absolute", top: 8, right: 10, fontSize: "clamp(6px,1.2dvh,8px)", letterSpacing: "0.18em", textTransform: "uppercase", color: group.color, fontFamily: "'Cinzel',Georgia,serif" }}>Active</div>
+        )}
+        <div style={{ fontSize: "clamp(11px,2.5dvh,18px)", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: group.color, fontFamily: "'Cinzel',Georgia,serif", textAlign: "center", lineHeight: 1.3 }}>{group.name}</div>
+        <div style={{ width: "60%", height: 1, background: `${group.color}40` }} />
+        <div style={{ fontSize: "clamp(6px,1.2dvh,9px)", letterSpacing: "0.2em", textTransform: "uppercase", color: `${group.color}80`, fontFamily: "'Cinzel',Georgia,serif", textAlign: "center" }}>
+          {hasVariants ? "2 Variants  ▸" : (isActive ? "Currently Active" : "Tap to Select")}
+        </div>
+      </div>
+    );
+  };
+
+  const renderVariantCard = (faction) => {
+    const isActive = faction.id === activeFactionId;
+    const color = faction.color;
+    return (
+      <div
+        key={faction.id}
+        onClick={() => handleTap(faction)}
+        {...makeCardTouch(() => handleTap(faction))}
+        style={{
+          flex: 1, maxWidth: 320, height: "100%", maxHeight: 280,
+          display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+          gap: 12, border: `1px solid ${isActive ? color : color + "40"}`,
+          borderRadius: 10, background: isActive ? `${color}18` : `${color}08`,
+          cursor: "pointer", userSelect: "none", transition: "background 0.2s, border-color 0.2s",
+          padding: 20, position: "relative",
+        }}
+      >
+        {isActive && (
+          <div style={{ position: "absolute", top: 8, right: 10, fontSize: "clamp(6px,1.2dvh,8px)", letterSpacing: "0.18em", textTransform: "uppercase", color, fontFamily: "'Cinzel',Georgia,serif" }}>Active</div>
+        )}
+        <div style={{ fontSize: "clamp(14px,3dvh,24px)", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color, fontFamily: "'Cinzel',Georgia,serif", textAlign: "center", lineHeight: 1.3 }}>{faction.name}</div>
+        <div style={{ width: "60%", height: 1, background: `${color}40` }} />
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px 18px", width: "100%" }}>
+          {[
+            ["HP", faction.stats.maxHp],
+            ["Maneuver", faction.initialManeuver],
+            ["Fortune", faction.stats.fortuneDice],
+            ["Power C/M/L", `${faction.stats.closePower}/${faction.stats.medPower}/${faction.stats.longPower}`],
+            ...(faction.stats.roundArmor > 0 ? [["Round Armor", faction.stats.roundArmor]] : []),
+            ...(faction.stats.chainArmor > 0 ? [["Chain Armor", faction.stats.chainArmor]] : []),
+          ].map(([label, val]) => (
+            <div key={label} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
+              <div style={{ fontSize: "clamp(7px,1.5dvh,11px)", letterSpacing: "0.14em", textTransform: "uppercase", color: "#ffffff35", fontFamily: "'Cinzel',Georgia,serif", whiteSpace: "nowrap" }}>{label}</div>
+              <div style={{ fontSize: "clamp(9px,2dvh,15px)", fontWeight: 700, color, fontFamily: "'Cinzel',Georgia,serif" }}>{val}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{ fontSize: "clamp(6px,1.2dvh,9px)", letterSpacing: "0.2em", textTransform: "uppercase", color: `${color}50`, fontFamily: "'Cinzel',Georgia,serif", marginTop: 4 }}>
+          {isActive ? "Currently Active" : "Tap to Select"}
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="rt-screen" style={{ fontFamily: "'Cinzel',Georgia,serif", position: "relative" }}>
       <div className="rt-header">
         <div style={{ fontSize: 12, letterSpacing: "0.28em", textTransform: "uppercase", color: "#c9922a", fontWeight: 700 }}>Red Tides</div>
-        <div style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "#ffffff30" }}>Choose Your Faction</div>
-        <div style={{ width: 80 }} />
+        <div style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "#ffffff30" }}>
+          {subGroup ? subGroup.name : "Choose Your Faction"}
+        </div>
+        {subGroup ? (
+          <button onClick={() => setSubGroup(null)} style={{ background: "transparent", border: "1px solid #ffffff20", color: "#ffffff50", padding: "3px 12px", borderRadius: 4, cursor: "pointer", fontSize: 9, letterSpacing: "0.14em", textTransform: "uppercase", fontFamily: "'Cinzel',Georgia,serif" }}>
+            ← Back
+          </button>
+        ) : (
+          <div style={{ width: 80 }} />
+        )}
       </div>
 
-      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 16, padding: "12px 16px" }}>
-        {FACTIONS.map(faction => {
-          const isActive = faction.id === activeFactionId;
-          return (
-            <div
-              key={faction.id}
-              onClick={() => handleTap(faction)}
-              {...makeCardTouch(faction)}
-              style={{
-                flex: 1,
-                maxWidth: 320,
-                height: "100%",
-                maxHeight: 280,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 12,
-                border: `1px solid ${isActive ? faction.color : faction.color + "40"}`,
-                borderRadius: 10,
-                background: isActive ? `${faction.color}18` : `${faction.color}08`,
-                cursor: "pointer",
-                userSelect: "none",
-                transition: "background 0.2s, border-color 0.2s",
-                padding: 20,
-                position: "relative",
-              }}
-            >
-              {isActive && (
-                <div style={{ position: "absolute", top: 8, right: 10, fontSize: "clamp(6px,1.2dvh,8px)", letterSpacing: "0.18em", textTransform: "uppercase", color: faction.color, fontFamily: "'Cinzel',Georgia,serif" }}>Active</div>
-              )}
-              <div style={{ fontSize: "clamp(18px, 4dvh, 36px)", fontWeight: 700, letterSpacing: "0.25em", textTransform: "uppercase", color: faction.color, fontFamily: "'Cinzel',Georgia,serif" }}>{faction.name}</div>
-              <div style={{ width: "60%", height: 1, background: `${faction.color}40` }} />
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px 18px", width: "100%" }}>
-                {[
-                  ["HP", faction.stats.maxHp],
-                  ["Maneuver", faction.initialManeuver],
-                  ["Fortune", faction.stats.fortuneDice],
-                  ["Power C/M/L", `${faction.stats.closePower}/${faction.stats.medPower}/${faction.stats.longPower}`],
-                  ...(faction.stats.roundArmor > 0 ? [["Round Armor", faction.stats.roundArmor]] : []),
-                  ...(faction.stats.chainArmor > 0 ? [["Chain Armor", faction.stats.chainArmor]] : []),
-                ].map(([label, val]) => (
-                  <div key={label} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
-                    <div style={{ fontSize: "clamp(7px, 1.5dvh, 11px)", letterSpacing: "0.14em", textTransform: "uppercase", color: "#ffffff35", fontFamily: "'Cinzel',Georgia,serif", whiteSpace: "nowrap" }}>{label}</div>
-                    <div style={{ fontSize: "clamp(9px, 2dvh, 15px)", fontWeight: 700, color: faction.color, fontFamily: "'Cinzel',Georgia,serif" }}>{val}</div>
-                  </div>
-                ))}
-              </div>
-              <div style={{ fontSize: "clamp(6px, 1.2dvh, 9px)", letterSpacing: "0.2em", textTransform: "uppercase", color: `${faction.color}50`, fontFamily: "'Cinzel',Georgia,serif", marginTop: 4 }}>
-                {isActive ? "Currently Active" : "Tap to Select"}
-              </div>
-            </div>
-          );
-        })}
+      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: subGroup ? 16 : 12, padding: "12px 16px" }}>
+        {subGroup ? subGroup.variants.map(renderVariantCard) : FACTION_GROUPS.map(renderGroupCard)}
       </div>
 
       {/* Confirmation modal */}
       {pendingFaction && (
-        <div style={{
-          position: "absolute", inset: 0,
-          background: "#0d1117ee",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          zIndex: 100,
-        }}>
-          <div style={{
-            background: "#111820",
-            border: `1px solid ${pendingFaction.color}50`,
-            borderRadius: 10,
-            padding: "28px 32px",
-            maxWidth: 340,
-            width: "80%",
-            display: "flex", flexDirection: "column", alignItems: "center", gap: 16,
-            boxShadow: `0 0 40px ${pendingFaction.color}20`,
-          }}>
+        <div style={{ position: "absolute", inset: 0, background: "#0d1117ee", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100 }}>
+          <div style={{ background: "#111820", border: `1px solid ${pendingFaction.color}50`, borderRadius: 10, padding: "28px 32px", maxWidth: 340, width: "80%", display: "flex", flexDirection: "column", alignItems: "center", gap: 16, boxShadow: `0 0 40px ${pendingFaction.color}20` }}>
             <div style={{ fontSize: "clamp(13px,2.5dvh,18px)", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: pendingFaction.color, fontFamily: "'Cinzel',Georgia,serif" }}>
               {pendingFaction.name}
             </div>
             <div style={{ fontSize: "clamp(9px,1.8dvh,13px)", color: "#ffffff60", textAlign: "center", letterSpacing: "0.1em", lineHeight: 1.6, fontFamily: "'Cinzel',Georgia,serif" }}>
               You've made changes to your current setup. Selecting a new faction will erase all stats and reset to defaults.
             </div>
-            <div style={{ fontSize: "clamp(10px,2dvh,14px)", color: "#ffffff90", letterSpacing: "0.12em", fontFamily: "'Cinzel',Georgia,serif" }}>
-              Are you sure?
-            </div>
+            <div style={{ fontSize: "clamp(10px,2dvh,14px)", color: "#ffffff90", letterSpacing: "0.12em", fontFamily: "'Cinzel',Georgia,serif" }}>Are you sure?</div>
             <div style={{ display: "flex", gap: 12, marginTop: 4 }}>
-              <button
-                onClick={() => { onSelect(pendingFaction); setPendingFaction(null); }}
-                style={{
-                  background: `${pendingFaction.color}22`,
-                  border: `1px solid ${pendingFaction.color}70`,
-                  color: pendingFaction.color,
-                  padding: "6px 20px", borderRadius: 4, cursor: "pointer",
-                  fontSize: "clamp(8px,1.6dvh,11px)", letterSpacing: "0.18em", textTransform: "uppercase",
-                  fontFamily: "'Cinzel',Georgia,serif",
-                }}>
+              <button onClick={() => { onSelect(pendingFaction); setPendingFaction(null); }} style={{ background: `${pendingFaction.color}22`, border: `1px solid ${pendingFaction.color}70`, color: pendingFaction.color, padding: "6px 20px", borderRadius: 4, cursor: "pointer", fontSize: "clamp(8px,1.6dvh,11px)", letterSpacing: "0.18em", textTransform: "uppercase", fontFamily: "'Cinzel',Georgia,serif" }}>
                 Confirm
               </button>
-              <button
-                onClick={() => setPendingFaction(null)}
-                style={{
-                  background: "transparent",
-                  border: "1px solid #ffffff20",
-                  color: "#ffffff40",
-                  padding: "6px 20px", borderRadius: 4, cursor: "pointer",
-                  fontSize: "clamp(8px,1.6dvh,11px)", letterSpacing: "0.18em", textTransform: "uppercase",
-                  fontFamily: "'Cinzel',Georgia,serif",
-                }}>
+              <button onClick={() => setPendingFaction(null)} style={{ background: "transparent", border: "1px solid #ffffff20", color: "#ffffff40", padding: "6px 20px", borderRadius: 4, cursor: "pointer", fontSize: "clamp(8px,1.6dvh,11px)", letterSpacing: "0.18em", textTransform: "uppercase", fontFamily: "'Cinzel',Georgia,serif" }}>
                 Cancel
               </button>
             </div>
@@ -692,13 +700,19 @@ export default function App() {
     setScreen(0);
   };
 
+  const activeFaction = activeFactionId
+    ? FACTION_GROUPS.flatMap(g => g.variants).find(v => v.id === activeFactionId)
+    : null;
+  const factionColor = activeFaction?.color ?? "#c9922a";
+  const factionName  = activeFaction?.name  ?? null;
+
   return (
     <div className="rt-app"
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
       style={{
         background: "#0d1117",
-        backgroundImage: `radial-gradient(ellipse at 15% 50%, #0d2235 0%, transparent 55%), radial-gradient(ellipse at 85% 50%, #1a0d08 0%, transparent 55%)`,
+        backgroundImage: screen === 0 ? `radial-gradient(ellipse at 50% 0%, ${factionColor}60 0%, transparent 60%), radial-gradient(ellipse at 15% 60%, ${factionColor}40 0%, transparent 50%), radial-gradient(ellipse at 85% 60%, ${factionColor}30 0%, transparent 50%)` : "none",
       }}
     >
       <style>{GLOBAL_CSS}</style>
@@ -761,7 +775,7 @@ export default function App() {
         ))}
       </div>
 
-      {screen === 0 && <MainScreen config={config} hp={hp} maneuver={maneuver} round={round} onHpChange={handleHpChange} onManChange={handleManChange} onRoundChange={handleRoundChange} />}
+      {screen === 0 && <MainScreen config={config} hp={hp} maneuver={maneuver} round={round} onHpChange={handleHpChange} onManChange={handleManChange} onRoundChange={handleRoundChange} factionName={factionName} factionColor={factionColor} />}
       {screen === 1 && <ConfigScreen config={config} setConfig={handleConfigChange} />}
       {screen === 2 && <FactionScreen onSelect={handleFactionSelect} isDirty={isDirty} activeFactionId={activeFactionId} />}
     </div>
