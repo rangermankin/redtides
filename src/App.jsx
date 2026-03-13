@@ -712,7 +712,7 @@ export default function App() {
       onTouchEnd={onTouchEnd}
       style={{
         background: "#0d1117",
-        backgroundImage: `radial-gradient(ellipse at 50% 0%, ${factionColor}60 0%, transparent 60%), radial-gradient(ellipse at 15% 60%, ${factionColor}40 0%, transparent 50%), radial-gradient(ellipse at 85% 60%, ${factionColor}30 0%, transparent 50%)`,
+        backgroundImage: screen === 0 ? `radial-gradient(ellipse at 50% 0%, ${factionColor}60 0%, transparent 60%), radial-gradient(ellipse at 15% 60%, ${factionColor}40 0%, transparent 50%), radial-gradient(ellipse at 85% 60%, ${factionColor}30 0%, transparent 50%)` : "none",
       }}
     >
       <style>{GLOBAL_CSS}</style>
