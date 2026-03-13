@@ -420,38 +420,38 @@ function MainScreen({ config, hp, maneuver, round, onHpChange, onManChange, onRo
     <div className="rt-screen" style={{ fontFamily: "'Cinzel',Georgia,serif" }}>
       <div className="rt-header">
         <div style={{ fontSize: 12, letterSpacing: "0.28em", textTransform: "uppercase", color: fc, fontWeight: 700 }}>Red Tides</div>
-        <div style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "#ffffff50" }}>{factionName ?? "Ship Status"}</div>
+        <div style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: factionName ? `${fc}dd` : "#ffffff50" }}>{factionName ?? "Ship Status"}</div>
         <div style={{ fontSize: 8, letterSpacing: "0.15em", textTransform: "uppercase", color: "#ffffff20" }}>Configure ⟶</div>
       </div>
 
       <div className="rt-grid" style={{ display: "grid", gridTemplateColumns: "25% 50% 25%", gridTemplateRows: "repeat(3,1fr)" }}>
-        <div style={{ border: "1px solid #ffffff0d", display: "flex" }}>
+        <div style={{ border: `1px solid ${fc}40`, display: "flex" }}>
           <PairCell aLabel="Grp Arm" aVal={s.grapeArmor} bLabel="Grp Mod" bVal={s.grapeMod} accent={COL_ACCENT[2]} fs={fs} />
         </div>
-        <div style={{ border: "1px solid #ffffff0d" }}>
+        <div style={{ border: `1px solid ${fc}40` }}>
           <AdjustCell value={hp} min={0} max={maxHp} onChange={onHpChange} label="Hull Points" sub="max" subVal={maxHp} accent="#f0e6c8" hpMode={true} fs={fs} />
         </div>
-        <div style={{ border: "1px solid #ffffff0d" }}>
+        <div style={{ border: `1px solid ${fc}40` }}>
           <RoundCell round={round} onChange={onRoundChange} fs={fs} />
         </div>
 
-        <div style={{ border: "1px solid #ffffff0d", display: "flex" }}>
+        <div style={{ border: `1px solid ${fc}40`, display: "flex" }}>
           <PairCell aLabel="Rnd Arm" aVal={s.roundArmor} bLabel="Rnd Mod" bVal={s.roundMod} accent={COL_ACCENT[1]} fs={fs} />
         </div>
-        <div style={{ border: "1px solid #ffffff0d" }}>
+        <div style={{ border: `1px solid ${fc}40` }}>
           <AdjustCell value={maneuver} min={0} max={99} onChange={onManChange} label="Maneuver" accent="#4a9eca" fs={fs} />
         </div>
-        <div style={{ border: "1px solid #ffffff0d" }}>
+        <div style={{ border: `1px solid ${fc}40` }}>
           <DisplayCell label="Fortune" value={s.fortuneDice} accent={COL_ACCENT[0]} fs={fs} />
         </div>
 
-        <div style={{ border: "1px solid #ffffff0d", display: "flex" }}>
+        <div style={{ border: `1px solid ${fc}40`, display: "flex" }}>
           <PairCell aLabel="Chn Arm" aVal={s.chainArmor} bLabel="Chn Mod" bVal={s.chainMod} accent={COL_ACCENT[3]} fs={fs} />
         </div>
-        <div style={{ border: "1px solid #ffffff0d" }}>
+        <div style={{ border: `1px solid ${fc}40` }}>
           <CannonCell close={s.closePower} med={s.medPower} long={s.longPower} fs={fs} />
         </div>
-        <div style={{ border: "1px solid #ffffff0d" }}>
+        <div style={{ border: `1px solid ${fc}40` }}>
           <DisplayCell label="Infamy" value={s.infamy} warn={s.infamy >= 10} warnLabel="Jealousy!" fs={fs} />
         </div>
       </div>
@@ -712,7 +712,7 @@ export default function App() {
       onTouchEnd={onTouchEnd}
       style={{
         background: "#0d1117",
-        backgroundImage: `radial-gradient(ellipse at 15% 50%, ${factionColor}20 0%, transparent 55%), radial-gradient(ellipse at 85% 50%, ${factionColor}12 0%, transparent 55%)`,
+        backgroundImage: `radial-gradient(ellipse at 50% 0%, ${factionColor}60 0%, transparent 60%), radial-gradient(ellipse at 15% 60%, ${factionColor}40 0%, transparent 50%), radial-gradient(ellipse at 85% 60%, ${factionColor}30 0%, transparent 50%)`,
       }}
     >
       <style>{GLOBAL_CSS}</style>
