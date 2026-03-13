@@ -37,15 +37,15 @@ function useFontSizes() {
 
 const STATS = [
   { id: "maxHp",       label: "Max HP",       col: 0 },
-  { id: "longPower",   label: "Long Power",   col: 1 },
+  { id: "longPower",   label: "Long Power",   col: 1, color: "#e05c3a" },
   { id: "grapeArmor",  label: "Grape Armor",  col: 2 },
   { id: "grapeMod",    label: "Grape Mod",    col: 3 },
   { id: "fortuneDice", label: "Fortune Dice", col: 0 },
-  { id: "medPower",    label: "Med Power",    col: 1 },
+  { id: "medPower",    label: "Med Power",    col: 1, color: "#c9922a" },
   { id: "roundArmor",  label: "Round Armor",  col: 2 },
   { id: "roundMod",    label: "Round Mod",    col: 3 },
   { id: "infamy",      label: "Infamy",       col: 0 },
-  { id: "closePower",  label: "Close Power",  col: 1 },
+  { id: "closePower",  label: "Close Power",  col: 1, color: "#7ec87e" },
   { id: "chainArmor",  label: "Chain Armor",  col: 2 },
   { id: "chainMod",    label: "Chain Mod",    col: 3 },
 ];
@@ -250,23 +250,24 @@ function useTapSplit({ value, min, max, onChange }) {
 // ── Config screen ──────────────────────────────────────────────
 
 function ConfigCell({ stat, value, onChange, fs = {} }) {
-  const accent = COL_ACCENT[stat.col];
+  const accent = stat.color ?? COL_ACCENT[stat.col];
   const { onTouchStart, onTouchEnd, onClick, bg } = useTapSplit({ value, min: 0, max: 99, onChange });
   return (
     <div onClick={onClick} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}
       style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", cursor: "pointer", userSelect: "none", background: bg, transition: "background 0.18s", borderRight: "1px solid #ffffff0d", borderBottom: "1px solid #ffffff0d", overflow: "hidden" }}>
       <div style={{ position: "absolute", inset: 0, display: "flex", pointerEvents: "none" }}>
         <div style={{ flex: 1, display: "flex", alignItems: "center", paddingLeft: 6, fontSize: 14, color: "#ffffff20", fontFamily: "serif" }}>−</div>
-        <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: 6, fontSize: 14, color: `${accent}55`, fontFamily: "serif" }}>+</div>
+        <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: 6, fontSize: 14, color: `${accent}88`, fontFamily: "serif" }}>+</div>
       </div>
-      <div style={{ fontSize: Math.min(fs.label ?? 10, 13), letterSpacing: "0.18em", textTransform: "uppercase", fontFamily: "'Cinzel',Georgia,serif", marginBottom: 2, color: accent, whiteSpace: "nowrap" }}>{stat.label}</div>
-      <div style={{ fontSize: fs.bigval ?? "clamp(13px,3.8dvh,28px)", fontWeight: 700, fontFamily: "'Cinzel',Georgia,serif", lineHeight: 1, color: value === 0 ? "#ffffff28" : accent }}>{value}</div>
+      <div style={{ fontSize: Math.min(fs.label ?? 10, 13), letterSpacing: "0.18em", textTransform: "uppercase", fontFamily: "'Cinzel',Georgia,serif", marginBottom: 2, color: `${accent}dd`, whiteSpace: "nowrap" }}>{stat.label}</div>
+      <div style={{ fontSize: fs.bigval ?? "clamp(13px,3.8dvh,28px)", fontWeight: 700, fontFamily: "'Cinzel',Georgia,serif", lineHeight: 1, color: value === 0 ? "#ffffff45" : "#f0e6c8" }}>{value}</div>
     </div>
   );
 }
 
 function ConfigScreen({ config, setConfig }) {
   const fs = useFontSizes();
+  const configFs = { ...fs, bigval: Math.round(fs.bigval * 1.5) };
   return (
     <div className="rt-screen" style={{ fontFamily: "'Cinzel',Georgia,serif" }}>
       <div className="rt-header">
@@ -289,7 +290,7 @@ function ConfigScreen({ config, setConfig }) {
 
       <div className="rt-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gridTemplateRows: "repeat(3,1fr)" }}>
         {STATS.map(stat => (
-          <ConfigCell key={stat.id} stat={stat} value={config[stat.id]} onChange={val => setConfig({ ...config, [stat.id]: val })} fs={fs} />
+          <ConfigCell key={stat.id} stat={stat} value={config[stat.id]} onChange={val => setConfig({ ...config, [stat.id]: val })} fs={configFs} />
         ))}
       </div>
 
