@@ -289,7 +289,7 @@ function ConfigScreen({ config, setConfig }) {
 
       <div className="rt-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gridTemplateRows: "repeat(3,1fr)" }}>
         {STATS.map(stat => (
-          <ConfigCell key={stat.id} stat={stat} value={config[stat.id]} onChange={val => setConfig(prev => ({ ...prev, [stat.id]: val }))} fs={fs} />
+          <ConfigCell key={stat.id} stat={stat} value={config[stat.id]} onChange={val => setConfig({ ...config, [stat.id]: val })} fs={fs} />
         ))}
       </div>
 
