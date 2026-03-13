@@ -475,10 +475,10 @@ const FACTION_GROUPS = [
     ],
   },
   {
-    id: "cabal", name: "Caribbea Cabal", color: "#c9922a",
+    id: "cabal", name: "Caribbea Cabal", color: "#d4b832",
     variants: [
-      { id: "cabal-main",  name: "Caribbea Cabal", color: "#c9922a", description: "Masters of cannon and gold", stats: { ...P }, initialManeuver: 6 },
-      { id: "cabal-brann", name: "Brann Cult",      color: "#c9922a", description: "Forge and flame",            stats: { ...P }, initialManeuver: 6 },
+      { id: "cabal-main",  name: "Caribbea Cabal", color: "#d4b832", description: "Masters of cannon and gold", stats: { ...P }, initialManeuver: 6 },
+      { id: "cabal-brann", name: "Brann Cult",      color: "#d4b832", description: "Forge and flame",            stats: { ...P }, initialManeuver: 6 },
     ],
   },
   {
