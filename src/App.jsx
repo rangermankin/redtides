@@ -250,17 +250,18 @@ function useTapSplit({ value, min, max, onChange }) {
 // ── Config screen ──────────────────────────────────────────────
 
 function ConfigCell({ stat, value, onChange, fs = {} }) {
-  const accent = stat.color ?? COL_ACCENT[stat.col];
+  const colColor = COL_ACCENT[stat.col];
+  const valColor = stat.color ?? "#f0e6c8";
   const { onTouchStart, onTouchEnd, onClick, bg } = useTapSplit({ value, min: 0, max: 99, onChange });
   return (
     <div onClick={onClick} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}
       style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", cursor: "pointer", userSelect: "none", background: bg, transition: "background 0.18s", borderRight: "1px solid #ffffff0d", borderBottom: "1px solid #ffffff0d", overflow: "hidden" }}>
       <div style={{ position: "absolute", inset: 0, display: "flex", pointerEvents: "none" }}>
         <div style={{ flex: 1, display: "flex", alignItems: "center", paddingLeft: 6, fontSize: 14, color: "#ffffff20", fontFamily: "serif" }}>−</div>
-        <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: 6, fontSize: 14, color: `${accent}88`, fontFamily: "serif" }}>+</div>
+        <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: 6, fontSize: 14, color: `${colColor}88`, fontFamily: "serif" }}>+</div>
       </div>
-      <div style={{ fontSize: Math.min(fs.label ?? 10, 13), letterSpacing: "0.18em", textTransform: "uppercase", fontFamily: "'Cinzel',Georgia,serif", marginBottom: 2, color: `${accent}dd`, whiteSpace: "nowrap" }}>{stat.label}</div>
-      <div style={{ fontSize: fs.bigval ?? "clamp(13px,3.8dvh,28px)", fontWeight: 700, fontFamily: "'Cinzel',Georgia,serif", lineHeight: 1, color: value === 0 ? "#ffffff45" : "#f0e6c8" }}>{value}</div>
+      <div style={{ fontSize: Math.min(fs.label ?? 10, 13), letterSpacing: "0.18em", textTransform: "uppercase", fontFamily: "'Cinzel',Georgia,serif", marginBottom: 2, color: `${colColor}dd`, whiteSpace: "nowrap" }}>{stat.label}</div>
+      <div style={{ fontSize: fs.bigval ?? "clamp(13px,3.8dvh,28px)", fontWeight: 700, fontFamily: "'Cinzel',Georgia,serif", lineHeight: 1, color: value === 0 ? "#ffffff45" : valColor }}>{value}</div>
     </div>
   );
 }
