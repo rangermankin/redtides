@@ -462,41 +462,42 @@ function MainScreen({ config, hp, maneuver, round, onHpChange, onManChange, onRo
 
 // ── Faction presets ────────────────────────────────────────────
 
-const Z = { maxHp: 0, fortuneDice: 0, infamy: 0, longPower: 0, medPower: 0, closePower: 0, grapeArmor: 0, roundArmor: 0, chainArmor: 0, grapeMod: 0, roundMod: 0, chainMod: 0 };
+const P = { maxHp: 20, fortuneDice: 2, infamy: 0, longPower: 4, medPower: 4, closePower: 4, grapeArmor: 0, roundArmor: 0, chainArmor: 0, grapeMod: 0, roundMod: 0, chainMod: 0 };
+const A = { maxHp: 15, fortuneDice: 2, infamy: 0, longPower: 4, medPower: 4, closePower: 4, grapeArmor: 0, roundArmor: 1, chainArmor: 1, grapeMod: 0, roundMod: 0, chainMod: 0 };
 
 const FACTION_GROUPS = [
   {
     id: "deep", name: "Creatures of the Deep", color: "#9b59b6",
     variants: [
-      { id: "deep-main",    name: "Creatures of the Deep", color: "#9b59b6", description: "Masters of the ocean depths",        stats: { ...Z }, initialManeuver: 0 },
-      { id: "deep-mariana", name: "Mariana Swarm",          color: "#9b59b6", description: "The depths rise to swallow all",     stats: { ...Z }, initialManeuver: 0 },
+      { id: "deep-main",    name: "Creatures of the Deep", color: "#9b59b6", description: "Masters of the ocean depths",        stats: { ...P }, initialManeuver: 6 },
+      { id: "deep-mariana", name: "Mariana Swarm",          color: "#9b59b6", description: "The depths rise to swallow all",     stats: { ...P }, initialManeuver: 6 },
     ],
   },
   {
     id: "blue", name: "Blue Realm", color: "#7ec87e",
     variants: [
-      { id: "blue-main",  name: "Blue Realm",     color: "#7ec87e", description: "Lords of wind and tide",    stats: { ...Z }, initialManeuver: 0 },
-      { id: "blue-dirge", name: "Dirge of Piety", color: "#7ec87e", description: "Mourners of the deep",      stats: { ...Z }, initialManeuver: 0 },
+      { id: "blue-main",  name: "Blue Realm",     color: "#7ec87e", description: "Lords of wind and tide",    stats: { ...P }, initialManeuver: 6 },
+      { id: "blue-dirge", name: "Dirge of Piety", color: "#7ec87e", description: "Mourners of the deep",      stats: { ...P }, initialManeuver: 6 },
     ],
   },
   {
     id: "fire", name: "Firebelly", color: "#e05c3a",
     variants: [
-      { id: "fire-main",  name: "Firebelly",        color: "#e05c3a", description: "Fire and iron",                  stats: { ...Z }, initialManeuver: 0 },
-      { id: "fire-order", name: "Order of Eustice", color: "#e05c3a", description: "Sacred geometries of war",       stats: { ...Z }, initialManeuver: 0 },
+      { id: "fire-main",  name: "Firebelly",        color: "#e05c3a", description: "Fire and iron",                  stats: { ...P }, initialManeuver: 6 },
+      { id: "fire-order", name: "Order of Eustice", color: "#e05c3a", description: "Sacred geometries of war",       stats: { ...P }, initialManeuver: 6 },
     ],
   },
   {
     id: "cabal", name: "Caribbea Cabal", color: "#c9922a",
     variants: [
-      { id: "cabal-main",  name: "Caribbea Cabal", color: "#c9922a", description: "Masters of cannon and gold", stats: { ...Z }, initialManeuver: 0 },
-      { id: "cabal-brann", name: "Brann Cult",      color: "#c9922a", description: "Forge and flame",            stats: { ...Z }, initialManeuver: 0 },
+      { id: "cabal-main",  name: "Caribbea Cabal", color: "#c9922a", description: "Masters of cannon and gold", stats: { ...P }, initialManeuver: 6 },
+      { id: "cabal-brann", name: "Brann Cult",      color: "#c9922a", description: "Forge and flame",            stats: { ...P }, initialManeuver: 6 },
     ],
   },
   {
     id: "azteca", name: "Azteca Republic", color: "#e8a020",
     variants: [
-      { id: "azteca-main", name: "Azteca Republic", color: "#e8a020", description: "Divine vessels of the sun", stats: { ...Z }, initialManeuver: 0 },
+      { id: "azteca-main", name: "Azteca Republic", color: "#e8a020", description: "Divine vessels of the sun", stats: { ...A }, initialManeuver: 5 },
     ],
   },
 ];
